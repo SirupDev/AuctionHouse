@@ -1,0 +1,9 @@
+name: OB-AuctionHouse
+main: gg.tater.auctionhouse.AuctionHousePlugin
+api-version: 1.16
+version: 1.0
+author: Skinlesspotato
+depend:
+  - Vault
+  - OB-Addons
+  - Bedrock
