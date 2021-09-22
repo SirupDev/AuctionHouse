@@ -11,18 +11,21 @@ import java.util.List;
 public class AuctionServer {
 
     private final String name;
-    private final List<AuctionItem> items = Lists.newArrayList();
+    private final List<AuctionItem> listings = Lists.newArrayList();
 
     // Use OB-Addons ServerEntry server name for AuctionServer name.
     public AuctionServer(ServerEntry entry) {
         this.name = entry.getName();
     }
 
-    public void addAuctionItem(AuctionItem item) {
-        items.add(item);
+    public void addServerListing(AuctionItem item) {
+        listings.add(item);
     }
 
-    public void removeAuctionItem(AuctionItem item) {
-        items.remove(item);
+    public void removeServerListing(AuctionItem item) {
+        listings.remove(listings.stream()
+                .filter(filtered -> filtered.getUuid().equals(item.getUuid()))
+                .findFirst()
+                .orElse(null));
     }
 }

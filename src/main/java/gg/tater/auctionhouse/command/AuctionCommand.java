@@ -5,13 +5,14 @@ import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Default;
 import co.aikar.commands.annotation.Subcommand;
 import co.aikar.commands.annotation.Syntax;
-import gg.tater.auctionhouse.gui.ActiveItemsGui;
+import gg.tater.auctionhouse.gui.DirectiveGui;
 import gg.tater.auctionhouse.item.AuctionItem;
 import gg.tater.auctionhouse.player.AuctionProfile;
 import gg.tater.auctionhouse.server.AuctionServer;
 import gg.tater.auctionhouse.util.ChatUtil;
 import gg.tater.bedrock.database.BedrockDatabase;
 import lombok.RequiredArgsConstructor;
+import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -26,10 +27,11 @@ public class AuctionCommand extends BaseCommand {
     private final Economy economy;
     private final AuctionServer server;
     private final BedrockDatabase database;
+    private final HeadDatabaseAPI api;
 
     @Default
     private void onDefault(AuctionProfile profile) {
-        new ActiveItemsGui(profile, database, server.getItems(), server, economy).open(profile.toPlayer());
+        new DirectiveGui(profile, database, economy, server, api).open(profile.toPlayer());
     }
 
     @Subcommand("list")
@@ -52,7 +54,7 @@ public class AuctionCommand extends BaseCommand {
         ItemStack stack = new ItemStack(hand.clone());
         AuctionItem item = new AuctionItem(profile, stack, price);
 
-        server.addAuctionItem(item);
+        server.addServerListing(item);
         database.publish(server);
 
         profile.addListing(item);
@@ -61,6 +63,6 @@ public class AuctionCommand extends BaseCommand {
         player.getInventory().setItemInMainHand(new ItemStack(Material.AIR));
         player.updateInventory();
 
-        player.sendMessage(ChatUtil.AUCTION_PREFIX + ChatColor.GRAY + "Successfully listed your item for $" + ChatColor.LIGHT_PURPLE + ChatUtil.DECIMAL_FORMATTER.format(price) + ChatColor.GRAY + ".");
+        player.sendMessage(ChatUtil.AUCTION_PREFIX + ChatColor.GRAY + "Successfully listed your item for " + ChatColor.LIGHT_PURPLE + "$" + ChatUtil.DECIMAL_FORMATTER.format(price) + ChatColor.GRAY + ".");
     }
 }

@@ -1,10 +1,12 @@
 package gg.tater.auctionhouse.item;
 
 import gg.tater.addons.AddonsPlugin;
-import gg.tater.auctionhouse.player.AuctionProfile;
 import gg.tater.auctionhouse.server.AuctionServer;
+import gg.tater.auctionhouse.util.ChatUtil;
 import gg.tater.bedrock.database.BedrockDatabase;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 import java.util.Iterator;
 import java.util.concurrent.TimeUnit;
@@ -16,24 +18,20 @@ public class AuctionItemHandler {
         // listen for item expiration so we can keep the redis hash minimal in size.
         AddonsPlugin.SERVICE.scheduleAtFixedRate(() -> {
 
-            Iterator<AuctionItem> iterator = server.getItems().iterator();
+            Iterator<AuctionItem> iterator = server.getListings().iterator();
 
             while (iterator.hasNext()) {
                 AuctionItem item = iterator.next();
 
                 if (item.hasExpired()) {
+                    Player target = Bukkit.getPlayer(item.getSellerUUID());
+                    if (target != null) {
+                        target.sendMessage(ChatUtil.AUCTION_PREFIX + ChatColor.GREEN + "One of your auction items has expired. You may claim it in the auction menu.");
+                    }
+
                     iterator.remove();
                     database.publish(server);
-
-                    database.getCachedEntity(AuctionProfile.class, item.getSellerUUID().toString())
-                            .ifPresent(profile -> {
-                                profile.removeListing(item);
-                                profile.addReturnItem(item);
-                                profile.returnItems();
-                                database.publish(profile);
-                            });
-
-                    Bukkit.getLogger().info("Auction item expired. Removed from cache with ID: " + item.getUuid().toString());
+                    Bukkit.getLogger().info("Auction item expired. Removed from server auction cache with ID: " + item.getUuid().toString());
                 }
             }
         }, 0L, 1L, TimeUnit.SECONDS);

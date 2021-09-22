@@ -14,6 +14,7 @@ import gg.tater.auctionhouse.player.PlayerListener;
 import gg.tater.auctionhouse.server.AuctionServer;
 import gg.tater.auctionhouse.server.AuctionServerEntity;
 import gg.tater.bedrock.BedrockPlugin;
+import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -25,6 +26,7 @@ public final class AuctionHousePlugin extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        HeadDatabaseAPI api = new HeadDatabaseAPI();
         PaperCommandManager manager = new PaperCommandManager(this);
         RegisteredServiceProvider<Economy> provider = getServer().getServicesManager().getRegistration(Economy.class);
 
@@ -63,7 +65,7 @@ public final class AuctionHousePlugin extends JavaPlugin {
                     return DataUtil.getProfile(database, AuctionProfile.class, true, arg);
                 });
 
-                manager.registerCommand(new AuctionCommand(provider.getProvider(), server, database));
+                manager.registerCommand(new AuctionCommand(provider.getProvider(), server, database, api));
             });
         });
     }
