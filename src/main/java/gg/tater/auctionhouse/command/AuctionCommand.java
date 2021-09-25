@@ -5,7 +5,7 @@ import co.aikar.commands.annotation.CommandAlias;
 import co.aikar.commands.annotation.Default;
 import co.aikar.commands.annotation.Subcommand;
 import co.aikar.commands.annotation.Syntax;
-import gg.tater.auctionhouse.gui.DirectiveGui;
+import gg.tater.auctionhouse.gui.impl.DirectiveGui;
 import gg.tater.auctionhouse.item.AuctionItem;
 import gg.tater.auctionhouse.item.AuctionItemHierarchy;
 import gg.tater.auctionhouse.player.AuctionProfile;

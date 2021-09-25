@@ -1,9 +1,8 @@
 package gg.tater.auctionhouse.util;
 
-import gg.tater.addons.AddonsPlugin;
-import gg.tater.addons.builder.ItemBuilder;
-import gg.tater.addons.gui.Button;
-import gg.tater.auctionhouse.gui.DirectiveGui;
+import gg.tater.auctionhouse.AuctionHousePlugin;
+import gg.tater.auctionhouse.gui.Button;
+import gg.tater.auctionhouse.gui.impl.DirectiveGui;
 import gg.tater.auctionhouse.player.AuctionProfile;
 import gg.tater.auctionhouse.server.AuctionServer;
 import gg.tater.bedrock.database.BedrockDatabase;
@@ -25,7 +24,6 @@ public class ButtonUtil {
                 .setLore(Collections.singletonList(ChatColor.GRAY + "Click to go back to the previous menu."))
                 .toItemStack())
                 .onClick((player, event) ->
-                        AddonsPlugin.get().ifPresent(plugin ->
-                                Bukkit.getScheduler().runTaskLater(plugin, () -> new DirectiveGui(profile, database, economy, server, api).open(player), 2L)));
+                        Bukkit.getScheduler().runTaskLater(AuctionHousePlugin.get(), () -> new DirectiveGui(profile, database, economy, server, api).open(player), 2L));
     }
 }

@@ -1,6 +1,6 @@
 package gg.tater.auctionhouse.item;
 
-import gg.tater.addons.AddonsPlugin;
+import gg.tater.auctionhouse.AuctionHousePlugin;
 import gg.tater.auctionhouse.server.AuctionServer;
 import gg.tater.auctionhouse.util.ChatUtil;
 import gg.tater.bedrock.database.BedrockDatabase;
@@ -16,7 +16,7 @@ public class AuctionItemHandler {
     public AuctionItemHandler(AuctionServer server, BedrockDatabase database) {
 
         // listen for item expiration so we can keep the redis hash minimal in size.
-        AddonsPlugin.SERVICE.scheduleAtFixedRate(() -> {
+        AuctionHousePlugin.SERVICE.scheduleAtFixedRate(() -> {
 
             Iterator<AuctionItem> iterator = server.getListings().iterator();
 

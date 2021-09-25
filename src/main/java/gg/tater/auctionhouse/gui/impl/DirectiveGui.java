@@ -1,14 +1,14 @@
-package gg.tater.auctionhouse.gui;
+package gg.tater.auctionhouse.gui.impl;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import gg.tater.addons.AddonsPlugin;
-import gg.tater.addons.builder.ItemBuilder;
-import gg.tater.addons.gui.Button;
-import gg.tater.addons.gui.Gui;
+import gg.tater.auctionhouse.AuctionHousePlugin;
+import gg.tater.auctionhouse.gui.Button;
+import gg.tater.auctionhouse.gui.Gui;
 import gg.tater.auctionhouse.item.AuctionItem;
 import gg.tater.auctionhouse.player.AuctionProfile;
 import gg.tater.auctionhouse.server.AuctionServer;
+import gg.tater.auctionhouse.util.ItemBuilder;
 import gg.tater.bedrock.database.BedrockDatabase;
 import me.arcaniax.hdb.api.HeadDatabaseAPI;
 import net.milkbowl.vault.economy.Economy;
@@ -58,9 +58,9 @@ public class DirectiveGui extends Gui {
                         " "))
                 .toItemStack())
                 .onClick((player, event) ->
-                        AddonsPlugin.get().ifPresent(plugin ->
-                                Bukkit.getScheduler().runTaskLater(plugin, () ->
-                                        new ActiveItemsGui(profile, database, server, economy, api, false).open(profile.toPlayer()), 2L))));
+
+                        Bukkit.getScheduler().runTaskLater(AuctionHousePlugin.get(), () ->
+                                new ActiveItemsGui(profile, database, server, economy, api, false).open(profile.toPlayer()), 2L)));
 
         map.put(22, new Button(new ItemBuilder(api.getItemHead("34670"))
                 .setName(ChatColor.BOLD + "" + ChatColor.GOLD + "Your Active Auctions " + ChatColor.GRAY + "(Click)")
@@ -78,9 +78,8 @@ public class DirectiveGui extends Gui {
                         " "))
                 .toItemStack())
                 .onClick((player, event) ->
-                        AddonsPlugin.get().ifPresent(plugin ->
-                                Bukkit.getScheduler().runTaskLater(plugin, () ->
-                                        new ActiveItemsGui(profile, database, server, economy, api, true).open(profile.toPlayer()), 2L))));
+                        Bukkit.getScheduler().runTaskLater(AuctionHousePlugin.get(), () ->
+                                new ActiveItemsGui(profile, database, server, economy, api, true).open(profile.toPlayer()), 2L)));
 
         map.put(24, new Button(new ItemBuilder(api.getItemHead("45163"))
                 .setName(ChatColor.BOLD + "" + ChatColor.GOLD + "Your Expired Auctions " + ChatColor.GRAY + "(Click)")
@@ -99,9 +98,8 @@ public class DirectiveGui extends Gui {
                         " "))
                 .toItemStack())
                 .onClick((player, event) ->
-                        AddonsPlugin.get().ifPresent(plugin ->
-                                Bukkit.getScheduler().runTaskLater(plugin, () ->
-                                        new ExpiredItemsGui(profile, server, database, economy, api).open(profile.toPlayer()), 2L))));
+                        Bukkit.getScheduler().runTaskLater(AuctionHousePlugin.get(), () ->
+                                new ExpiredItemsGui(profile, server, database, economy, api).open(profile.toPlayer()), 2L)));
 
         return map;
     }

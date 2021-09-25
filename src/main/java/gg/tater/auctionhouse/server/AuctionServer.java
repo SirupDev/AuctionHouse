@@ -1,22 +1,19 @@
 package gg.tater.auctionhouse.server;
 
 import com.google.common.collect.Lists;
-import gg.tater.addons.server.ServerEntry;
 import gg.tater.auctionhouse.item.AuctionItem;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import org.bukkit.Bukkit;
 
 import java.util.List;
 
 @Getter
+@RequiredArgsConstructor
 public class AuctionServer {
 
-    private final String name;
+    private final String name = Bukkit.getServer().getName();
     private final List<AuctionItem> listings = Lists.newArrayList();
-
-    // Use OB-Addons ServerEntry server name for AuctionServer name.
-    public AuctionServer(ServerEntry entry) {
-        this.name = entry.getName();
-    }
 
     public void addServerListing(AuctionItem item) {
         listings.add(item);
