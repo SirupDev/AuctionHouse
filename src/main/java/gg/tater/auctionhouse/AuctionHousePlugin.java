@@ -46,7 +46,7 @@ public final class AuctionHousePlugin extends JavaPlugin {
         RegisteredServiceProvider<Economy> provider = getServer().getServicesManager().getRegistration(Economy.class);
 
         if (provider == null) {
-            Bukkit.getLogger().severe("Could not boot OB-AuctionHouse due to vault not being properly hooked.");
+            Bukkit.getLogger().severe("Could not boot AuctionHouse due to vault not being properly hooked.");
             return;
         }
 
