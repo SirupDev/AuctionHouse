@@ -2,7 +2,9 @@ package gg.tater.auctionhouse.player;
 
 import gg.tater.addons.event.Events;
 import gg.tater.bedrock.database.BedrockDatabase;
+import org.bukkit.entity.Player;
 import org.bukkit.event.player.AsyncPlayerPreLoginEvent;
+import org.bukkit.event.player.PlayerLoginEvent;
 
 import java.util.UUID;
 
@@ -17,6 +19,14 @@ public class PlayerListener {
 
             profile.setName(event.getName());
             database.publish(profile);
+        });
+
+        Events.listen(PlayerLoginEvent.class, event -> {
+            Player player = event.getPlayer();
+
+            database.getCachedEntity(AuctionProfile.class, player.getUniqueId().toString()).ifPresent(profile -> {
+
+            });
         });
     }
 }

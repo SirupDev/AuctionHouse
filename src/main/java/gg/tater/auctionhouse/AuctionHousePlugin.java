@@ -1,5 +1,6 @@
 package gg.tater.auctionhouse;
 
+import co.aikar.commands.ConditionFailedException;
 import co.aikar.commands.PaperCommandManager;
 import gg.tater.addons.AddonsPlugin;
 import gg.tater.addons.server.ServerEntry;
@@ -20,6 +21,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Optional;
 import java.util.UUID;
 
 public final class AuctionHousePlugin extends JavaPlugin {
@@ -58,11 +60,22 @@ public final class AuctionHousePlugin extends JavaPlugin {
                 manager.getCommandContexts().registerIssuerAwareContext(AuctionProfile.class, context -> {
                     if (!context.hasFlag("other")) {
                         UUID uuid = context.getPlayer().getUniqueId();
-                        return DataUtil.getProfile(database, AuctionProfile.class, false, uuid.toString());
+                        Optional<AuctionProfile> optional = DataUtil.getProfile(database, AuctionProfile.class, false, uuid.toString());
+
+                        if (!optional.isPresent()) {
+                            throw new ConditionFailedException("Could not find your auction profile.");
+                        }
+
+                        return optional.get();
                     }
 
                     String arg = context.popFirstArg();
-                    return DataUtil.getProfile(database, AuctionProfile.class, true, arg);
+                    Optional<AuctionProfile> optional = DataUtil.getProfile(database, AuctionProfile.class, true, arg);
+                    if (!optional.isPresent()) {
+                        throw new ConditionFailedException("Could not find " + arg + "'s auction profile.");
+                    }
+
+                    return optional.get();
                 });
 
                 manager.registerCommand(new AuctionCommand(provider.getProvider(), server, database, api));

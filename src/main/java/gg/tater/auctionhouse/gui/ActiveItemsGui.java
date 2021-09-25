@@ -7,6 +7,7 @@ import gg.tater.addons.gui.Button;
 import gg.tater.addons.gui.Gui;
 import gg.tater.addons.util.TimeUtil;
 import gg.tater.auctionhouse.item.AuctionItem;
+import gg.tater.auctionhouse.item.AuctionItemHierarchy;
 import gg.tater.auctionhouse.player.AuctionProfile;
 import gg.tater.auctionhouse.server.AuctionServer;
 import gg.tater.auctionhouse.util.ButtonUtil;
@@ -17,13 +18,13 @@ import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class ActiveItemsGui extends Gui {
 
@@ -52,6 +53,7 @@ public class ActiveItemsGui extends Gui {
 
         items.stream()
                 .filter(item -> !item.hasExpired())
+                .sorted(Comparator.comparingInt(item -> item.getHierarchy().getIntegerLevel()))
                 .forEach(item ->
                         buttons.add(new Button(new ItemBuilder(item.getStack().clone())
                                 .setLore(getLore(item))
@@ -144,6 +146,13 @@ public class ActiveItemsGui extends Gui {
 
         lore.add(" ");
         lore.add(ChatColor.DARK_PURPLE + "Auction Details:");
+
+        if (item.getHierarchy() != AuctionItemHierarchy.REGULAR) {
+            lore.add(" ");
+            lore.add(ChatColor.WHITE + "*" + ChatColor.YELLOW + "" + ChatColor.BOLD + " PINNED LISTING! " + ChatColor.WHITE + "*");
+            lore.add(" ");
+        }
+
         lore.add(ChatColor.WHITE + "Seller: " + ChatColor.LIGHT_PURPLE + item.getSellerName());
         lore.add(ChatColor.WHITE + "Price: " + ChatColor.LIGHT_PURPLE + "$" + ChatUtil.DECIMAL_FORMATTER.format(item.getPrice()));
         lore.add(ChatColor.WHITE + "Ends in: " + ChatColor.LIGHT_PURPLE + TimeUtil.formatTime(item.getEnd()));

@@ -7,6 +7,7 @@ import co.aikar.commands.annotation.Subcommand;
 import co.aikar.commands.annotation.Syntax;
 import gg.tater.auctionhouse.gui.DirectiveGui;
 import gg.tater.auctionhouse.item.AuctionItem;
+import gg.tater.auctionhouse.item.AuctionItemHierarchy;
 import gg.tater.auctionhouse.player.AuctionProfile;
 import gg.tater.auctionhouse.server.AuctionServer;
 import gg.tater.auctionhouse.util.ChatUtil;
@@ -52,7 +53,8 @@ public class AuctionCommand extends BaseCommand {
         }
 
         ItemStack stack = new ItemStack(hand.clone());
-        AuctionItem item = new AuctionItem(profile, stack, price);
+        AuctionItemHierarchy hierarchy = AuctionItemHierarchy.getHierarchy(player);
+        AuctionItem item = new AuctionItem(profile, stack, price, hierarchy);
 
         server.addServerListing(item);
         database.publish(server);

@@ -28,13 +28,16 @@ public class AuctionItem {
 
     private final int price;
 
+    private final AuctionItemHierarchy hierarchy;
+
     private long end = Instant.now().plus(8L, ChronoUnit.HOURS).toEpochMilli();
 
-    public AuctionItem(AuctionProfile profile, ItemStack stack, int price) {
+    public AuctionItem(AuctionProfile profile, ItemStack stack, int price, AuctionItemHierarchy hierarchy) {
         this.stack = stack;
         this.sellerName = profile.getName();
         this.sellerUUID = profile.getUuid();
         this.price = price;
+        this.hierarchy = hierarchy;
     }
 
     public boolean hasExpired() {
